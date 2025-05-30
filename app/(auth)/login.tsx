@@ -71,7 +71,7 @@ const Login = () => {
             {/* Footer */}
             <Animated.View entering={FadeInDown.duration(1000).delay(300).springify().damping(12)} style={styles.footer}>
                 <Typo size={15}>Don't have an account?</Typo>
-                <Pressable onPress={()=>router.push('/(auth)/register')}>
+                <Pressable onPress={()=>router.navigate('/(auth)/register')}>
                     <Typo size={15} fontWeight={'700'} color={colors.primary}>Sign Up</Typo>
                 </Pressable>
             </Animated.View>

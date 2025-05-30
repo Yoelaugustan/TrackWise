@@ -99,7 +99,7 @@ const Register = () => {
             {/* Footer */}
             <Animated.View entering={FadeInDown.duration(1000).delay(300).springify().damping(12)} style={styles.footer}>
                 <Typo size={15}>Already have an account?</Typo>
-                <Pressable onPress={()=>router.push('/(auth)/login')}>
+                <Pressable onPress={()=>router.navigate('/(auth)/login')}>
                     <Typo size={15} fontWeight={'700'} color={colors.primary}>Log In</Typo>
                 </Pressable>
             </Animated.View>
