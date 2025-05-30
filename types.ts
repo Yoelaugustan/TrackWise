@@ -109,7 +109,7 @@ export type TransactionItemProps = {
 
 export interface InputProps extends TextInputProps {
     icon?: React.ReactNode;
-    containerStyle: ViewStyle;
+    containerStyle?: ViewStyle;
     inputStyle?: TextStyle;
     inputRef?: React.RefObject<TextInput>;
 }
