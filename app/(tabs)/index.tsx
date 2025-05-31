@@ -4,6 +4,7 @@ import Button from '@/components/Button'
 import Typo from '@/components/Typo'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'expo-router'
+import ScreenWrapper from '@/components/ScreenWrapper'
 
 const Home = () => {
   const router = useRouter()
@@ -12,12 +13,14 @@ const Home = () => {
     router.navigate('/(auth)/welcome')
   }
   return (
-    <View>
-      <Text>Home</Text>
-      <Button onPress={handleLogout}>
-        <Typo>Logout</Typo>
-      </Button>
-    </View> 
+    <ScreenWrapper>
+      <View>
+        <Typo>Home</Typo>
+        <Button onPress={handleLogout}>
+          <Typo>Logout</Typo>
+        </Button>
+      </View> 
+    </ScreenWrapper>
   )
 }
 
