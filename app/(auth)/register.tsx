@@ -10,6 +10,8 @@ import * as Icons from 'phosphor-react-native'
 import Button from '@/components/Button'
 import { useRouter } from 'expo-router'
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
+import { supabase } from '../../lib/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = () => {
     const emailRef = useRef('')
@@ -29,10 +31,26 @@ const Register = () => {
             Alert.alert('Sign up', 'Password Does Not Match')
             return
         }
-        console.log('email: ', emailRef.current)
-        console.log('name: ', nameRef.current)
-        console.log('password: ', passwordRef.current)
-        console.log("good to go")
+
+        setIsLoading(true)
+        
+        const {data: {user, session}, error} = await supabase.auth.signUp({
+          email: emailRef.current,
+          password: passwordRef.current,
+        })
+        console.log("Session: ", session)
+        console.log("error: ", error)
+        setIsLoading(false)
+
+        if (error) {
+          Alert.alert(error.message)
+          return
+        }
+        
+        if(session){
+          router.replace('/(tabs)')
+        }
+        
     }
   return (
     <ScreenWrapper>
