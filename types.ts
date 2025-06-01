@@ -64,6 +64,7 @@ export type HeaderProps = {
     style?: ViewStyle;
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
+    showBackButton?: boolean;
 }
 
 export type BackButtonProps = {
@@ -140,21 +141,7 @@ export type UserType = {
 export type UserDataType = {
     name: string;
     image?: any;
-}
-
-export type AuthContextType = {
-    user: UserType;
-    setUser: Function;
-    login: (
-        email: string,
-        password: string
-    ) => Promise<{ success: boolean; msg?: string }>;
-    register: (
-        email: string,
-        password: string,
-        name: string
-    ) => Promise<{ success: boolean; msg?: string }>;
-    updateUserData: (userId: string) => Promise<void>
+    email: string;
 }
 
 export type ResponseType = {
