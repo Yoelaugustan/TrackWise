@@ -24,10 +24,6 @@ export function useUpdateUserProfile(): UseUpdateUserProfileResult {
       setError(null)
 
       try {
-        // Debug logs
-        console.log('=== UPDATE PROFILE START ===')
-        console.log('Parameters received:', { updatedEmail, updatedUsername, updatedImageUrl })
-        
         const userId = await AsyncStorage.getItem('userId')
 
         if (!userId) {
@@ -52,12 +48,7 @@ export function useUpdateUserProfile(): UseUpdateUserProfileResult {
           throw new Error('No matching authentication record found')
         }
 
-        console.log('Current user email:', authRow.email)
-        console.log('Email to update to:', updatedEmail)
-
         if (updatedEmail && updatedEmail.trim() !== authRow.email) {
-          console.log('Updating email from', authRow.email, 'to', updatedEmail.trim())
-
           const { error: updateAuthError } = await supabase
             .from('authentication')
             .update({ email: updatedEmail.trim() })
@@ -75,8 +66,16 @@ export function useUpdateUserProfile(): UseUpdateUserProfileResult {
         if (updatedUsername !== undefined && updatedUsername.trim() !== '') {
           updates.username = updatedUsername.trim()
         }
-        if (updatedImageUrl !== undefined) {
-          updates.image = updatedImageUrl
+        if (updatedImageUrl) {
+          // If it's an object with a "uri" field
+          const imageUri =
+            typeof updatedImageUrl === 'object' && 'uri' in updatedImageUrl
+              ? (updatedImageUrl as { uri: string }).uri
+              : String(updatedImageUrl)
+
+          if (imageUri.trim().length > 0) {
+            updates.image = imageUri.trim()
+          }
         }
 
         console.log('Profile updates to apply:', updates)

@@ -7,7 +7,7 @@ import ModalWrapper from '@/components/ModalWrapper'
 import Header from '@/components/Header'
 import BackButton from '@/components/BackButton'
 import { Image } from 'expo-image'
-import { getProfileImage } from '@/services/imageServices'
+import { getProfileImage, uploadFiletoCloudinary } from '@/services/imageServices'
 import * as Icons from 'phosphor-react-native'
 import Typo from '@/components/Typo'
 import Input from '@/components/Input'
@@ -27,6 +27,8 @@ const ProfileModal = () => {
         image: null,
         email: '',
     })
+
+    const [uploadingImage, setUploadingImage] = useState(false)
     
     useEffect(() => {
         setUserData({
@@ -46,7 +48,22 @@ const ProfileModal = () => {
         console.log(result.assets[0]);
 
         if (!result.canceled) {
-            setUserData({...userData, image: result.assets[0].uri});
+
+            setUploadingImage(true)
+
+            const uploadResult = await uploadFiletoCloudinary(
+                { uri: result.assets[0].uri }, 
+                'users'
+            )
+
+            if (uploadResult.success && uploadResult.data) {
+                setUserData({...userData, image: uploadResult.data})
+                console.log('Image uploaded successfully:', uploadResult.data)
+            } else {
+                Alert.alert('Upload Failed', uploadResult.msg || 'Failed to upload image')
+            }
+
+            setUploadingImage(false)
         }
     };
     
@@ -168,7 +185,7 @@ const styles = StyleSheet.create({
         width: verticalScale(135),
         borderRadius: 200,
         borderWidth: 1,
-        borderColor: colors.neutral500
+        borderColor: colors.neutral200
     },
     editIcons: {
         position: 'absolute',
