@@ -3,44 +3,31 @@
     import { colors } from '@/constants/theme'
     import { useRouter } from 'expo-router'
     import AsyncStorage from '@react-native-async-storage/async-storage'
-    import { supabase } from '@/lib/supabase'
 
     const index = () => {
         const router = useRouter()
 
         useEffect(() => {
-            const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_OUT') {
-                    router.replace('/(auth)/welcome')
-                }
-            })
-
-            const checkSession = async () => {
-                const {data: {session}, error} = await supabase.auth.getSession()
-                if (error) {
+            const checkAuthStatus = async () => {
+                try{
+                    const storedUserId = await AsyncStorage.getItem('userId')
+                    if (storedUserId) {
+                        router.replace('/(tabs)')
+                    }
+                    else{
+                        setTimeout(() => {
+                            router.replace('/(auth)/welcome')
+                        }, 2000)
+                    }
+                } catch (error){
                     console.log(error)
                     setTimeout(() => {
                         router.replace('/(auth)/welcome')
-                    }, 3000)
-                    return
-                }
-
-                if (session) {
-                    router.replace('/(tabs)')
-                }
-                else {
-                    setTimeout(() => {
-                        router.replace('/(auth)/welcome')
-                    }, 3000)
+                    }, 2000)
                 }
             }
-
-            checkSession()
-
-            return () => {
-                listener?.subscription.unsubscribe()
-            }
-        }, [])
+            checkAuthStatus();
+        }, [router])
 
         return (
             <View style={styles.container}>

@@ -11,6 +11,7 @@ import Button from '@/components/Button'
 import { useRouter } from 'expo-router'
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
 import { supabase } from '@/lib/supabase'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
     const emailRef = useRef('')
@@ -31,14 +32,37 @@ const Login = () => {
     
         setIsLoading(false)
 
-        if (error){
-            Alert.alert(error.message)
-            return
-        } 
-            
+        try {
+            const {data: authRows, error: authError} = await supabase
+                .from('authentication')
+                .select('id, password')
+                .eq('email', emailRef.current.trim())
+                .limit(1)
+                .single()
 
-        if (session) {
-            router.replace('/(tabs)')
+            if(authError && authError.code !== 'PGRST116'){
+                throw authError
+            }
+
+            if (!authRows) {
+                Alert.alert('Login Error', 'Email not registered.');
+                setIsLoading(false);
+                return;
+            }
+
+            if (authRows.password !== passwordRef.current) {
+                Alert.alert('Login Error', 'Incorrect password.');
+                setIsLoading(false);
+                return;
+            }
+
+            await AsyncStorage.setItem('userId', authRows.id);
+
+            router.replace('/(tabs)');
+        } catch (error: any) {
+            console.error('Login → unexpected error:', error);
+            Alert.alert('Login Error', error.message ?? 'Something went wrong.');
+            setIsLoading(false);
         }
     }
   return (
