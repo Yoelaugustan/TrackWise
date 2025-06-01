@@ -6,7 +6,7 @@ import { colors } from '@/constants/theme'
 const {height} = Dimensions.get('window')
 
 const ScreenWrapper = ({style, children}: ScreenWrapperProps) => {
-    let paddingTop = Platform.OS == 'ios'? height * 0.06 : 50; // buat IOS karena Dynamic Island
+    let paddingTop = Platform.OS == 'ios'? height * 0.03 : 30; // buat IOS karena Dynamic Island
   return (
     <View 
         style={[
