@@ -14,28 +14,28 @@ export default function CustomTabs({ state, descriptors, navigation }: BottomTab
             <Icons.House
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
-                color={isFocused ? colors.primary : colors.black}
+                color={isFocused ? colors.green : colors.black}
             />
         ),
         statistics: (isFocused: boolean) => (
             <Icons.ChartDonut
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
-                color={isFocused ? colors.primary : colors.black}
+                color={isFocused ? colors.green : colors.black}
             />
         ),
         wallet: (isFocused: boolean) => (
             <Icons.Wallet
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
-                color={isFocused ? colors.primary : colors.black}
+                color={isFocused ? colors.green : colors.black}
             />
         ),
         profile: (isFocused: boolean) => (
             <Icons.UserCircle
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
-                color={isFocused ? colors.primary : colors.black}
+                color={isFocused ? colors.green : colors.black}
             />
         )
     }
