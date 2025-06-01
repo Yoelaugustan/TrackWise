@@ -12,8 +12,9 @@ import { useRouter } from 'expo-router'
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
 import { supabase } from '../../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
-const Register = () => {
+  const Register = () => {
     const emailRef = useRef('')
     const passwordRef = useRef('')
     const passwordConfirmRef = useRef('')
@@ -22,35 +23,88 @@ const Register = () => {
     const [showPass, setShowPass] = useState(false)
     const [showConfPass, setShowConfPass] = useState(false)
     const router = useRouter()
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleSubmit = async()=>{
-        if(!emailRef.current || !passwordRef.current || !nameRef.current){
-            Alert.alert('Sign up', 'Please fill all the fields')
-            return
-        }
-        if(passwordRef.current != passwordConfirmRef.current){
-            Alert.alert('Sign up', 'Password Does Not Match')
-            return
+      const name = nameRef.current.trim();
+      const email = emailRef.current.trim().toLowerCase();
+      const password = passwordRef.current;
+      const passwordConfirm = passwordConfirmRef.current;
+
+
+      if (!name || !email || !password || !passwordConfirm) {
+        Alert.alert('Sign Up', 'Please fill in all fields.');
+        return;
+      }
+
+      if (!emailRegex.test(email)) {
+        Alert.alert('Sign Up', 'Please provide a valid email address.');
+        return;
+      }
+
+      if (password.length < 6) {
+        Alert.alert('Sign Up', 'Password must be at least 6 characters long.');
+        return;
+      }
+
+      if (password !== passwordConfirm) {
+        Alert.alert('Sign Up', 'Passwords do not match.');
+        return;
+      }
+      
+      setIsLoading(true);
+      try {
+        const { data: existing, error: selectErr } = await supabase
+          .from('authentication')
+          .select('id')
+          .eq('email', email)
+          .limit(1)
+          .single();
+
+        if (selectErr && selectErr.code !== 'PGRST116') {
+          throw selectErr;
         }
 
-        setIsLoading(true)
-        
-        const {data: {user, session}, error} = await supabase.auth.signUp({
-          email: emailRef.current,
-          password: passwordRef.current,
-        })
-        console.log("Session: ", session)
-        console.log("error: ", error)
-        setIsLoading(false)
-
-        if (error) {
-          Alert.alert(error.message)
-          return
+        if (existing) {
+          Alert.alert('Sign Up', 'Email is already registered.');
+          setIsLoading(false);
+          return;
         }
 
-        if(session){
-          router.replace('/(tabs)')
+        const newUserId = (uuid.v4() as string).toLowerCase();
+
+        const { error: insertAuthErr } = await supabase
+          .from('authentication')
+          .insert({
+            id: newUserId,
+            email: email,
+            password: password,
+          });
+
+        if (insertAuthErr) {
+          throw insertAuthErr;
         }
-        
+
+        const { error: insertProfileErr } = await supabase.
+        from('profiles').
+        insert({
+          id: newUserId,
+          username: name,
+        });
+
+        if (insertProfileErr) {
+          await supabase.from('authentication').delete().eq('id', newUserId);
+          throw insertProfileErr;
+        }
+
+        await AsyncStorage.setItem('userId', newUserId);
+
+        router.replace('/(tabs)');
+      } catch (error: any) {
+        console.error('Register → unexpected error:', error);
+        Alert.alert('Sign Up Error', error.message ?? 'Something went wrong.');
+        setIsLoading(false);
+      }
     }
   return (
     <ScreenWrapper>
