@@ -17,6 +17,7 @@ const Login = () => {
     const emailRef = useRef('')
     const passwordRef = useRef('')
     const [isLoading, setIsLoading] = useState(false)
+    const [showPass, setShowPass] = useState(false)
     const router = useRouter()
     const handleSubmit = async()=>{
         if(!emailRef.current || !passwordRef.current){
@@ -94,13 +95,22 @@ const Login = () => {
                     />
                     <Input 
                         placeholder='Enter Your Password'
-                        secureTextEntry
+                        containerStyle={styles.password}
+                        secureTextEntry={!showPass}
                         onChangeText={value=>passwordRef.current = value}
-                        icon={<Icons.Key size={verticalScale(26)} color={colors.black} weight='bold'/>}
+                        icon={
+                            <TouchableOpacity
+                                onPress={()=> setShowPass(value => !value)}
+                            >
+                                {showPass
+                                ? <Icons.Eye size={verticalScale(26)} color={colors.black} weight='bold'/>
+                                : <Icons.EyeClosed size={verticalScale(26)} color={colors.black} weight='bold'/>
+                                }
+                            </TouchableOpacity>
+                        }
                     />
 
-                    {/* UI only */}
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push({ pathname: '/(modals)/PasswordModal', params: { variant: 'login' } })}>
                         <Typo size={14} style={{alignSelf: 'flex-end'}}>Forgot Password?</Typo> 
                     </TouchableOpacity>
 
@@ -155,8 +165,11 @@ const styles = StyleSheet.create({
         fontSize: verticalScale(15),
     },
     loginImage: {
-    width: "100%",
-    height: verticalScale(250),
-    justifyContent: 'center'
-  },
+        width: "100%",
+        height: verticalScale(250),
+        justifyContent: 'center'
+    },
+    password: {
+        justifyContent: 'flex-start'
+    }
 })
