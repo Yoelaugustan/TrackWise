@@ -2,19 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { supabase } from '../lib/supabase' // adjust the import path to where your supabase client lives
-
-export interface UserProfile {
-  email: string | null
-  username: string | null
-  imageUrl: string | null
-}
-
-export interface UseUserProfileResult {
-  profile: UserProfile
-  loading: boolean
-  error: string | null
-  refetch: () => Promise<void>
-}
+import { UserProfile, UseUserProfileResult } from '@/types'
 
 export function useUserProfile(): UseUserProfileResult {
   const [profile, setProfile] = useState<UserProfile>({
