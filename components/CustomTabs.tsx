@@ -18,7 +18,7 @@ export default function CustomTabs({ state, descriptors, navigation }: BottomTab
             />
         ),
         statistics: (isFocused: boolean) => (
-            <Icons.ChartDonut
+            <Icons.ChartLineUp
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
                 color={isFocused ? colors.green : colors.black}
@@ -32,7 +32,7 @@ export default function CustomTabs({ state, descriptors, navigation }: BottomTab
             />
         ),
         profile: (isFocused: boolean) => (
-            <Icons.UserCircle
+            <Icons.User
                 size={verticalScale(30)}
                 weight={isFocused ? 'fill' : 'regular'}
                 color={isFocused ? colors.green : colors.black}

@@ -160,3 +160,39 @@ export type WalletType = {
     uid?: string;
     created?: Date;
 }
+
+export interface UserProfile {
+    email: string | null
+    username: string | null
+    imageUrl: string | null
+}
+
+export interface UseUserProfileResult {
+    profile: UserProfile
+    loading: boolean
+    error: string | null
+    refetch: () => Promise<void>
+}
+
+export interface UpdateUserProfileParams {
+    updatedEmail?: string
+    updatedUsername?: string
+    updatedImageUrl?: string
+}
+
+export interface UseUpdateUserProfileResult {
+    updateUserProfile: (params: UpdateUserProfileParams) => Promise<void>
+    loading: boolean
+    error: string | null
+}
+
+export interface UpdatePassword {
+    updatedPassword?: string
+    email?: string
+}
+
+export interface UpdatePasswordResult {
+    updateUserPassword: (params: UpdatePassword) => Promise<boolean>
+    loading: boolean
+    error: string | null
+}

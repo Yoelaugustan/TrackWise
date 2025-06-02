@@ -1,18 +1,7 @@
 import { useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-export interface UpdateUserProfileParams {
-  updatedEmail?: string
-  updatedUsername?: string
-  updatedImageUrl?: string
-}
-
-export interface UseUpdateUserProfileResult {
-  updateUserProfile: (params: UpdateUserProfileParams) => Promise<void>
-  loading: boolean
-  error: string | null
-}
+import { UpdateUserProfileParams, UseUpdateUserProfileResult } from '@/types'
 
 export function useUpdateUserProfile(): UseUpdateUserProfileResult {
   const [loading, setLoading] = useState<boolean>(false)

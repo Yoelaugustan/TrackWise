@@ -33,7 +33,7 @@ const Profile = () => {
     {
       title: 'Edit Profile',
       icon: (
-        <Icons.User 
+        <Icons.UserCircle
           size={26} 
           color={colors.white} 
         />
@@ -49,11 +49,11 @@ const Profile = () => {
           color={colors.white} 
         />
       ),
-      // routeName: '/(modals)/profileModal',
+      routeName: '/(modals)/PasswordModal',
       bgColor: colors.black,
     },
     {
-      title: 'Setting',
+      title: 'Setting (UI Only)',
       icon: (
         <Icons.GearSix
           size={26} 
@@ -64,7 +64,7 @@ const Profile = () => {
       bgColor: colors.black,
     },
     {
-      title: 'Privacy and Policy',
+      title: 'Privacy and Policy (UI Only)',
       icon: (
         <Icons.Shield 
           size={26} 
