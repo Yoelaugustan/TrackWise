@@ -75,8 +75,6 @@ const Profile = () => {
       bgColor: colors.black,
     },
   ]
-
-  useEffect
   
   const showLogoutAlert = () => {
     Alert.alert("Confirm", "Are You Sure you want to logout?", [
@@ -257,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   button: {
-    backgroundColor: "#e60202",
+    backgroundColor: colors.rose,
     flexDirection: 'row',
     gap: spacingX._10,
     width: "50%"
