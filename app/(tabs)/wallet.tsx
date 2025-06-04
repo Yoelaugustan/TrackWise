@@ -1,16 +1,38 @@
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { verticalScale } from '@/utils/styling'
 import { colors, radius, spacingY } from '@/constants/theme'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Typo from '@/components/Typo'
 import * as Icons from 'phosphor-react-native'
 import { router } from 'expo-router'
+import { useWalletActions } from '@/hooks/useWalletActions'
+import { WalletType } from '@/types'
+import Loading from '@/components/Loading'
+import WalletListItem from '@/components/WalletListItem'
+import { useFocusEffect } from '@react-navigation/native'
 
 const wallet = () => {
+  const [wallets, setWallets] = useState<WalletType[]>([])
+  const { selectWallet, updateWallet, deleteWallet, loading, error } = useWalletActions()
+
+  const fetchWallets = useCallback(async () => {
+    const data = await selectWallet()
+    if (data) setWallets(data)
+  }, [selectWallet])
+    
+  useFocusEffect(
+    useCallback(() => {
+      fetchWallets()
+    }, [fetchWallets])
+  )
+  
   const getTotalBalance = () => {
-    return 0
+    return wallets.reduce((total, item) => {
+      return total + (item.amount || 0)
+    }, 0)
   }
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -38,7 +60,16 @@ const wallet = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Todo: wallet list */}
+          {loading && <Loading />}
+          <FlatList 
+            data={wallets}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => (
+              <WalletListItem item={item} index={index} router={router} />
+            )}
+            contentContainerStyle={styles.listStyle}
+          />
+            
         </View>
       </View>
     </ScreenWrapper>
