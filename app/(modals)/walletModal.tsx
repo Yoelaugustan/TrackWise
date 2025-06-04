@@ -15,7 +15,7 @@ import { UserDataType, WalletType } from '@/types'
 import Button from '@/components/Button'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker';
 import ImageUpload from '@/components/ImageUpload'
 import { useWalletActions } from '@/hooks/useWalletActions'
@@ -29,6 +29,18 @@ const WalletModal = () => {
         name: '',
         image: null,
     })
+
+    const oldWallet: {name: string, image: string, id: string} = useLocalSearchParams()
+    
+    useEffect(() => {
+        if(oldWallet?.id){
+            setWallet({
+                name: oldWallet.name,
+                image: {uri: oldWallet.image},
+                id: oldWallet.id
+            })
+        }
+    }, [])
     
     const { insertWallet, updateWallet, deleteWallet, loading, error } = useWalletActions()
     const onSubmit = async () => {
@@ -38,6 +50,34 @@ const WalletModal = () => {
             return
         }
         
+        let finalImageUrl = typeof image === 'string' ? image : image.uri;
+
+        // Update wallet
+        if (oldWallet?.id) {
+            const isImageChanged = image && image.uri && image.uri !== oldWallet.image;
+
+            if (isImageChanged) {
+            setImageLoading(true);
+            const uploadResult = await uploadFiletoCloudinary({ uri: image.uri }, 'wallets');
+            setImageLoading(false);
+
+            if (uploadResult.success && uploadResult.data) {
+                finalImageUrl = uploadResult.data;
+            } else {
+                Alert.alert('Upload Failed', uploadResult.msg || 'Failed to upload image');
+                return;
+            }
+            }
+
+            const result = await updateWallet(oldWallet.id, { name, image: finalImageUrl });
+            if (result) {
+            Alert.alert('Success', 'Wallet updated!');
+            router.back();
+            }
+            return;
+        }
+        
+        // New Wallet
         setImageLoading(true)
         const uploadResult = await uploadFiletoCloudinary(
             { uri: image.uri }, 
@@ -55,12 +95,37 @@ const WalletModal = () => {
             Alert.alert('Upload Failed', uploadResult.msg || 'Failed to upload image')
         }
     }
+
+    const onDelete = async () => {
+        const result = await deleteWallet(oldWallet.id)
+        if (result) {
+            Alert.alert('Success', 'Wallet deleted!')
+            router.back()
+        }
+    }
+
+    const showDeleteAlert = () => {
+        Alert.alert(
+            "Confirm", "Are you sure you want to delete this wallet?\nThis action will remove all the transactions associated with this wallet",[
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Delete"),
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: onDelete,
+                    style: "destructive"
+                }
+            ]
+        )
+    }
     
     return (
     <ModalWrapper>
         
         <View style={styles.container}>
-            <Header title='New Wallet' showBackButton/>
+            <Header title={oldWallet?.id ? 'Update Wallet' : 'New Wallet'} showBackButton/>
 
             <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps='handled'>
 
@@ -85,8 +150,23 @@ const WalletModal = () => {
         </View>
 
         <View style={styles.footer}>
+            {
+                oldWallet?.id && (
+                    <Button 
+                        onPress={showDeleteAlert} 
+                        style={{
+                            backgroundColor: colors.rose,
+                            paddingHorizontal: spacingX._15
+                        }}
+                    >
+                        <Icons.Trash size={scale(20)} color={colors.white}/>
+                    </Button>
+                )
+            }
             <Button onPress={onSubmit} style={{flex: 1}} loading={loading || imageLoading}>
-                <Typo fontWeight={'600'}>Add Wallet</Typo>
+                <Typo fontWeight={'600'}>
+                    {oldWallet?.id ? 'Update Wallet' : 'Add Wallet'}
+                </Typo>
             </Button>
         </View>
     </ModalWrapper>

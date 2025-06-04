@@ -7,6 +7,32 @@ export function useWalletActions() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const selectWallet = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+        const uid = await AsyncStorage.getItem('userId')
+        if (!uid) throw new Error('User not logged in')
+
+        const { data, error: selectError } = await supabase
+            .from('wallet')
+            .select()
+            .eq('uid', uid)
+            .order('created', { ascending: false })
+
+        if (selectError) throw selectError
+
+        return data
+    } catch (err: any) {
+        setError(err.message)
+        return null
+    } finally {
+        setLoading(false)
+    }
+  }, [])
+
+
   const insertWallet = useCallback(async ({ name, image }: WalletType) => {
     setLoading(true)
     setError(null)
@@ -73,5 +99,5 @@ export function useWalletActions() {
     }
   }, [])
 
-  return { insertWallet, updateWallet, deleteWallet, loading, error }
+  return { selectWallet, insertWallet, updateWallet, deleteWallet, loading, error }
 }
