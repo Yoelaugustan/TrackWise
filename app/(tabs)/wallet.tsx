@@ -34,15 +34,15 @@ const wallet = () => {
   }
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper style={{backgroundColor: colors.green}}>
       <View style={styles.container}>
         {/* Balance */}
         <View style={styles.balanceView}>
           <View style={{alignItems: 'center'}}>
-            <Typo size={45} fontWeight={'500'}>
+            <Typo size={45} fontWeight={'500'} color={colors.white}>
               Rp. {getTotalBalance()?.toLocaleString('id-ID')}
             </Typo>
-            <Typo size={16} color={colors.neutral500}>Total Balance</Typo>
+            <Typo size={16} color={colors.neutral200}>Total Balance</Typo>
 
           </View>
         </View>
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
+    backgroundColor: colors.green
   },
   balanceView: {
     height: verticalScale(160),
@@ -96,18 +97,11 @@ const styles = StyleSheet.create({
   },
   wallets: {
     flex: 1,
+    backgroundColor: colors.white,
     borderTopRightRadius: radius._30,
     borderTopLeftRadius: radius._30,
     padding: spacingY._20,
     paddingTop: spacingY._25,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 3,
   },
   listStyle: {
     paddingVertical: spacingY._25,

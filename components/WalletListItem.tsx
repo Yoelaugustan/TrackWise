@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: verticalScale(17),
-
+        borderRadius: radius._20,
     },
     imageContainer: {
         height: verticalScale(70),
