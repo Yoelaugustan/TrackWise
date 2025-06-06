@@ -18,7 +18,7 @@ const _layout = () => {
         }}
       />
       <Stack.Screen 
-        name="(modals)/PasswordModal" 
+        name="(modals)/passwordModal" 
         options={{
           presentation: "modal",
         }}
