@@ -44,7 +44,7 @@ const Home = () => {
           </View>
 
           <TransactionList 
-            data={[1, 2, 3, 4, 5 ,6 , 7]} 
+            data={[1, 2, 3]} 
             loading={false} 
             title='Recent Transactions'
             emptyListMessage='No recent transactions'  

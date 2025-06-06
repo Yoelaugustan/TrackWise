@@ -56,7 +56,7 @@ const TransactionItem = ({
     item, index, handleClick
 }: TransactionItemProps) => {
 
-    let category = incomeCategory
+    let category = expenseCategories['entertainment']
     const IconComponent = category.icon
     return (
         <Animated.View entering={FadeInDown.delay(index * 70).springify().damping(14)} style={{ padding: 4, flex: 1 }}>
