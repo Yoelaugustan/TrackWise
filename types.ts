@@ -6,6 +6,7 @@ import {
     ActivityIndicatorProps,
     ImageStyle,
     PressableProps,
+    StyleProp,
     TextInput,
     TextInputProps,
     TextProps,
@@ -94,6 +95,10 @@ export type ExpenseCategoriesType = {
     [key: string]: CategoryType;
 }
 
+export type IncomeCategoriesType = {
+    [key: string]: CategoryType;
+}
+
 export type TransactionListType = {
     data: TransactionType[];
     title?: string;
@@ -115,7 +120,7 @@ export interface InputProps extends TextInputProps {
 }
 
 export interface CustomButtonProps extends TouchableOpacityProps {
-    style?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
     onPress?: () => void;
     loading?: boolean;
     children: React.ReactNode;
@@ -194,4 +199,11 @@ export interface UpdatePasswordResult {
     updateUserPassword: (params: UpdatePassword) => Promise<boolean>
     loading: boolean
     error: string | null
+}
+
+export interface CategoryPickerProps {
+    type: 'expense' | 'income'
+    selectedCategory: string | null
+    onSelectCategory: (value: string) => void
+    containerStyle?: StyleProp<ViewStyle>
 }

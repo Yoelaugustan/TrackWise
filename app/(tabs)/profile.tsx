@@ -49,7 +49,7 @@ const Profile = () => {
           color={colors.white} 
         />
       ),
-      routeName: '/(modals)/PasswordModal',
+      routeName: '/(modals)/passwordModal',
       bgColor: colors.black,
     },
     {
