@@ -1,4 +1,4 @@
-import { CategoryType, ExpenseCategoriesType } from "@/types";
+import { CategoryType, ExpenseCategoriesType, IncomeCategoriesType } from "@/types";
 import { colors } from "./theme";
 
 import * as Icons from "phosphor-react-native";
@@ -62,7 +62,7 @@ export const expenseCategories: ExpenseCategoriesType = {
         label: "Insurance",
         value: "insurance",
         icon: Icons.ShieldCheck,
-        bgColor: '#404040'
+        bgColor: '#11d925'
     },
     investments: {
         label: "Investments",
@@ -74,7 +74,7 @@ export const expenseCategories: ExpenseCategoriesType = {
         label: "Saving",
         value: "saving",
         icon: Icons.PiggyBank,
-        bgColor: '#065F46'
+        bgColor: '#ff5eda'
     },
     clothing: {
         label: "Clothing",
@@ -86,7 +86,7 @@ export const expenseCategories: ExpenseCategoriesType = {
         label: "Personal",
         value: "personal",
         icon: Icons.User,
-        bgColor: '#a21caf'
+        bgColor: colors.black
     },
     others: {
         label: "Others",
@@ -96,11 +96,31 @@ export const expenseCategories: ExpenseCategoriesType = {
     }
 }
 
-export const incomeCategory: CategoryType = {
-    label: "Income",
-    value: "income",
-    icon: Icons.CurrencyDollarSimple,
-    bgColor: "#16a34a"
+export const incomeCategories: IncomeCategoriesType = {
+    income: {
+        label: "Salary",
+        value: "Salary",
+        icon: Icons.Briefcase,
+        bgColor: "#0EA5E9"
+    },
+    bonus: {
+        label: "Bonus",
+        value: "Bonus",
+        icon: Icons.TipJar,
+        bgColor: "#EAB308"
+    },
+    investment: {
+        label: 'Investment',
+        value: 'investment',
+        icon: Icons.ChartLineUp,
+        bgColor: '#16A34A',
+    },
+    part_time: {
+        label: 'Part-Time',
+        value: 'part_time',
+        icon: Icons.Clock,
+        bgColor: '#9333EA',
+    },   
 }
 
 export const transactionTypes = [
