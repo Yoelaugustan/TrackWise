@@ -42,7 +42,7 @@ const wallet = () => {
             <Typo size={45} fontWeight={'500'} color={colors.white}>
               Rp. {getTotalBalance()?.toLocaleString('id-ID')}
             </Typo>
-            <Typo size={16} color={colors.neutral200}>Total Balance</Typo>
+            <Typo size={16} color={colors.neutral200}>Net Worth</Typo>
 
           </View>
         </View>
