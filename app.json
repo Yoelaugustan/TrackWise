@@ -37,6 +37,20 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "SUPABASE_URL": "https://fbncfiuuctouhvavtlnj.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZibmNmaXV1Y3RvdWh2YXZ0bG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NTM5MTAsImV4cCI6MjA1NjAyOTkxMH0.qqerxZGccQI0dXcwUJOGImxKdySkSXayJugbKezZoDY",
+      "router": {},
+      "eas": {
+        "projectId": "061d64c8-3c74-453d-a71b-edb77bb0785f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/061d64c8-3c74-453d-a71b-edb77bb0785f"
     }
   }
 }
