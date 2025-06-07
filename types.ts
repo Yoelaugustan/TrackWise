@@ -103,7 +103,6 @@ export type TransactionListType = {
     data: TransactionType[];
     title?: string;
     loading?: boolean;
-    emptyListMessage?: string;
 }
 
 export type TransactionItemProps = {
@@ -206,4 +205,9 @@ export interface CategoryPickerProps {
     selectedCategory: string | null
     onSelectCategory: (value: string) => void
     containerStyle?: StyleProp<ViewStyle>
+}
+
+export type DailyTransactionListProps = {
+    transactions?: TransactionType[]
+    loading?: boolean
 }

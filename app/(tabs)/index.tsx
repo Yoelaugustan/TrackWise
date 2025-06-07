@@ -37,14 +37,6 @@ const Home = () => {
             <Typo size={16} color={colors.neutral800}>Hello,</Typo>
             <Typo size={20} fontWeight={'500'}>{profile?.username}</Typo> 
           </View>
-
-          <TouchableOpacity style={styles.searchIcon}>
-            <Icons.MagnifyingGlass 
-              size={verticalScale(22)}
-              color={colors.neutral800}
-              weight='bold'
-            />
-          </TouchableOpacity>
         </View>
 
         <ScrollView 
@@ -60,7 +52,6 @@ const Home = () => {
             data={transactions} 
             loading={transactionLoading} 
             title='Recent Transactions'
-            emptyListMessage='No recent transactions'  
           />
         </ScrollView>
 
@@ -84,7 +75,7 @@ export default Home
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: spacingX._20,
+    paddingHorizontal: spacingX._15,
     marginTop: verticalScale(8)
   },
   header: {
@@ -92,10 +83,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacingY._10,
-  },
-  searchIcon: {
-    padding: spacingX._10,
-    borderRadius: 50,
   },
   floatingButton: {
     height: verticalScale(50),
