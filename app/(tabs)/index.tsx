@@ -5,8 +5,8 @@ import Typo from '@/components/Typo'
 import { supabase } from '@/lib/supabase'
 import { router, useFocusEffect, useRouter } from 'expo-router'
 import ScreenWrapper from '@/components/ScreenWrapper'
-import { colors, spacingX, spacingY } from '@/constants/theme'
-import { verticalScale } from '@/utils/styling'
+import { colors, radius, spacingX, spacingY } from '@/constants/theme'
+import { scale, verticalScale } from '@/utils/styling'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import * as Icons from 'phosphor-react-native'
 import HomeCard from '@/components/HomeCard'
@@ -73,11 +73,22 @@ const Home = () => {
             />
           </HomeCard>
 
-          <TransactionList 
-            data={filtered} 
-            loading={transactionLoading} 
-            title='Transactions this month'
-          />
+          {
+            filtered.length > 0 ? (
+              <TransactionList 
+                data={filtered} 
+                loading={transactionLoading} 
+                title='Transactions this month'
+              />
+            ) : (
+              <View style={styles.noDataContainer}>
+                <Typo size={16} color={colors.neutral600} style={styles.noDataText}>
+                  No Transaction data for this month
+                </Typo>
+              </View>
+            )
+          }
+          
         </ScrollView>
 
         <Button
@@ -121,5 +132,21 @@ const styles = StyleSheet.create({
     marginTop: spacingY._10,
     paddingBottom: verticalScale(100),
     gap: spacingY._25,
-  }
+    paddingHorizontal: scale(2)
+  },
+  noDataContainer: {
+    backgroundColor: colors.white,
+    borderRadius: radius._17,
+    padding: scale(40),
+    marginBottom: spacingY._20,
+    alignItems: 'center',
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  noDataText: {
+    textAlign: 'center',
+  },
 })
