@@ -37,7 +37,7 @@ const TransactionModal = () => {
         date: new Date(),
         category: "",
         image: null,
-        walletId: ""
+        walletID: ""
     })
 
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -73,7 +73,7 @@ const TransactionModal = () => {
     }, [transaction.type])
 
     const {
-        selectTransactions,
+        selectTransaction,
         insertTransaction,
         updateTransaction,
         deleteTransaction,
@@ -104,14 +104,40 @@ const TransactionModal = () => {
     }, [fetchWallets])
 
     const onSubmit = async () => {
-        const {type, amount, description, category, date, walletId, image} = transaction
+        const {type, amount, description, category, date, walletID, image} = transaction
 
-        if(!walletId || !amount || !date || (type === 'expense' && !category)){
+        if(!walletID || !amount || !date || (type === 'expense' && !category)){
             Alert.alert('Transaction', 'Please fill all the fields')
             return
         }
 
-        console.log('Sending to insertTransaction:', transaction)
+
+        try {
+            if(oldTransaction?.id){
+                const updated = await updateTransaction(oldTransaction.id, transaction)
+
+                if (updated){
+                    Alert.alert('Success', 'Transaction updated!')
+                    router.back()
+                }
+                else {
+                    Alert.alert('Error', 'Failed to update transaction')
+                }
+            }
+            else {
+                const inserted = await insertTransaction(transaction)
+                if (inserted){
+                    Alert.alert('Success', 'Transaction added!')
+                    router.back()
+                }
+                else {
+                    Alert.alert('Error', txError ?? 'Failed to add transaction')
+                }
+            }
+
+        } catch(error: any) {
+            Alert.alert('Error', error)
+        }
     }
 
     const onDelete = async () => {
@@ -222,9 +248,9 @@ const TransactionModal = () => {
                         itemContainerStyle={styles.dropDownItemContainer}
                         containerStyle={styles.dropDownListContainer}
                         placeholder={'Select Wallet'}
-                        value={transaction.walletId}
+                        value={transaction.walletID}
                         onChange={(item) => {
-                            setTransaction({...transaction, walletId: item.value})
+                            setTransaction({...transaction, walletID: item.value})
                         }}    
                     />
                 </View>

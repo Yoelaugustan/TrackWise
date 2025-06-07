@@ -1,9 +1,9 @@
 import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import Button from '@/components/Button'
 import Typo from '@/components/Typo'
 import { supabase } from '@/lib/supabase'
-import { router, useRouter } from 'expo-router'
+import { router, useFocusEffect, useRouter } from 'expo-router'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import { colors, spacingX, spacingY } from '@/constants/theme'
 import { verticalScale } from '@/utils/styling'
@@ -11,9 +11,22 @@ import { useUserProfile } from '@/hooks/useUserProfile'
 import * as Icons from 'phosphor-react-native'
 import HomeCard from '@/components/HomeCard'
 import TransactionList from '@/components/TransactionList'
+import { useTransactionActions } from '@/hooks/useTransactionActions'
 
 const Home = () => {
   const { profile, loading, error } = useUserProfile()
+  const [transactions, setTransactions] = useState<any[]>([])
+  const { selectTransaction, loading: transactionLoading, error: transactionError } = useTransactionActions()
+
+  useFocusEffect(
+    useCallback(() => {
+      const load = async () => {
+        const data = await selectTransaction()
+        if (data) setTransactions(data)
+      }
+      load()
+    }, [selectTransaction])
+  )
 
   return (
     <ScreenWrapper>
@@ -22,7 +35,7 @@ const Home = () => {
         <View style={styles.header}>
           <View style={{ gap: 4 }}>
             <Typo size={16} color={colors.neutral800}>Hello,</Typo>
-            <Typo size={20} fontWeight={'500'}>{profile?.username}</Typo>
+            <Typo size={20} fontWeight={'500'}>{profile?.username}</Typo> 
           </View>
 
           <TouchableOpacity style={styles.searchIcon}>
@@ -44,8 +57,8 @@ const Home = () => {
           </View>
 
           <TransactionList 
-            data={[1, 2, 3]} 
-            loading={false} 
+            data={transactions} 
+            loading={transactionLoading} 
             title='Recent Transactions'
             emptyListMessage='No recent transactions'  
           />

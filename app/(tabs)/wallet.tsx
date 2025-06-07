@@ -33,13 +33,15 @@ const wallet = () => {
     }, 0)
   }
 
+  const balanceColor = getTotalBalance() < 0 ? colors.rose : colors.white
+
   return (
     <ScreenWrapper style={{backgroundColor: colors.green}}>
       <View style={styles.container}>
         {/* Balance */}
         <View style={styles.balanceView}>
           <View style={{alignItems: 'center'}}>
-            <Typo size={45} fontWeight={'500'} color={colors.white}>
+            <Typo size={45} fontWeight={'500'} color={balanceColor}>
               Rp. {getTotalBalance()?.toLocaleString('id-ID')}
             </Typo>
             <Typo size={16} color={colors.neutral200}>Net Worth</Typo>

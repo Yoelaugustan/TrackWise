@@ -6,7 +6,7 @@ import { verticalScale } from '@/utils/styling'
 import Typo from './Typo'
 import { FlashList } from "@shopify/flash-list";
 import Loading from './Loading'
-import { expenseCategories, incomeCategory } from '@/constants/data'
+import { expenseCategories, incomeCategories } from '@/constants/data'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const TransactionList = ({
@@ -56,12 +56,38 @@ const TransactionItem = ({
     item, index, handleClick
 }: TransactionItemProps) => {
 
-    let category = expenseCategories['entertainment']
-    const IconComponent = category.icon
+    const cats = item.type === 'income'
+    ? incomeCategories
+    : expenseCategories
+
+    const catDef = cats[item.category!] || {
+        label: 'Unknown',
+        icon: null,
+        bgColor: colors.neutral300,
+    }
+    const IconComponent = catDef.icon
+
+    const d = new Date(item.date)
+
+    const monthNames = [
+        'January','February','March','April','May','June',
+        'July','August','September','October','November','December'
+    ]
+
+    const formattedDate = `${d.getDate()} ${
+        monthNames[d.getMonth()]
+    } ${d.getFullYear()}`
+
+    const isExpense = item.type === 'expense'
+    const sign = isExpense ? '-' : '+'
+    const amountColor = isExpense ? colors.rose : colors.green
+
+    const hasDescription = Boolean(item.description && item.description.trim())
+
     return (
         <Animated.View entering={FadeInDown.delay(index * 70).springify().damping(14)} style={{ padding: 4, flex: 1 }}>
             <TouchableOpacity style={styles.row} onPress={()=>handleClick(item)}>
-                <View style={[styles.icon, { backgroundColor: category.bgColor }]}>
+                <View style={[styles.icon, { backgroundColor: catDef.bgColor }]}>
                     {IconComponent && (
                         <IconComponent 
                             size={verticalScale(25)} 
@@ -71,18 +97,33 @@ const TransactionItem = ({
                     )}
                 </View>
 
-                <View style={styles.categoryDesc}>
-                    <Typo size={13} fontWeight={'500'}>{category.label}</Typo>
-                    <Typo size={10} color={colors.neutral600} textProps={{numberOfLines: 1}}>
-                        Watched Mission Impossible
+                <View 
+                    style={[
+                        styles.categoryDesc,
+                        !hasDescription && styles.categoryDescEmpty
+                    ]}
+                >
+                    <Typo 
+                        size={13} 
+                        fontWeight={'500'}
+                        style={!hasDescription && styles.categoryOnly}
+                    >
+                        {catDef.label}
                     </Typo>
+                    {
+                        hasDescription && (
+                            <Typo size={10} color={colors.neutral600} textProps={{numberOfLines: 1}}>
+                                {item.description ?? ''}
+                            </Typo>
+                        )
+                    }
                 </View>
 
                 <View style={styles.amountDate}>
-                    <Typo fontWeight={'500'} color={colors.rose} size={15}>
-                        - Rp. 50.000
+                    <Typo fontWeight={'500'} color={amountColor} size={15}>
+                        {`${sign} Rp. ${Number(item.amount).toLocaleString('id-ID')}`}
                     </Typo>
-                    <Typo size={10} color={colors.neutral600}>12 January 2025</Typo>
+                    <Typo size={10} color={colors.neutral600}>{formattedDate}</Typo>
                 </View>
             </TouchableOpacity>
         </Animated.View>
@@ -128,6 +169,14 @@ const styles = StyleSheet.create({
     categoryDesc: {
         flex: 1,
         gap: 2.5,
+    },
+    categoryDescEmpty: {
+        justifyContent: 'center',
+    },
+    categoryOnly: {
+        flex: 1,
+        textAlignVertical: 'center',
+        fontSize: verticalScale(15)
     },
     amountDate: {
         alignItems: 'flex-end',

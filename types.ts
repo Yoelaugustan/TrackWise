@@ -39,7 +39,7 @@ export type TypoProps = {
     color?: string;
     fontWeight?: TextStyle["fontWeight"];
     children: any | null;
-    style?: TextStyle;
+    style?: StyleProp<TextStyle>;
     textProps?: TextProps;
 }
 
@@ -80,8 +80,8 @@ export type TransactionType = {
     date: Date | string;
     description?: string;
     image?: any;
-    uid?: string;
-    walletId: string;
+    authUID?: string;
+    walletID: string;
 }
 
 export type CategoryType = {
@@ -159,7 +159,7 @@ export type WalletType = {
     name: string;
     amount?: number;
     totalIncome?: number;
-    totalExpenses?: number;
+    totalExpense?: number;
     image: any;
     uid?: string;
     created?: Date;
