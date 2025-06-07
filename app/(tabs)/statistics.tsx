@@ -13,6 +13,7 @@ import { PieChart } from 'react-native-chart-kit'
 import Loading from '@/components/Loading'
 import Header from '@/components/Header'
 import { useStatisticsData } from '@/hooks/useStatisticData'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -112,7 +113,7 @@ const Statistics = () => {
 
           {/* Pie Chart */}
           {pieChartData.length > 0 ? (
-            <View style={styles.chartContainer}>
+            <Animated.View entering={FadeInDown.duration(100).springify().damping(12)} style={styles.chartContainer}>
               <PieChart
                 data={pieChartData}
                 width={screenWidth - 40}
@@ -130,7 +131,7 @@ const Statistics = () => {
                 hasLegend={true}
                 avoidFalseZero={true}
               />
-            </View>
+            </Animated.View>
           ) : (
             <View style={styles.noDataContainer}>
               <Typo size={16} color={colors.neutral600} style={styles.noDataText}>
@@ -141,16 +142,16 @@ const Statistics = () => {
 
           {/* Total Amount */}
           {totalAmount > 0 && (
-            <View style={styles.totalContainer}>
+            <Animated.View entering={FadeInDown.duration(200).springify().damping(12)} style={styles.totalContainer}>
               <Typo size={18} fontWeight="600" color={colors.black}>
                 Total {selectedType === 'expense' ? 'Expenses' : 'Income'}: Rp. {totalAmount.toLocaleString('id-ID')}
               </Typo>
-            </View>
+            </Animated.View>
           )}
 
           {/* Category Breakdown */}
           {categoryData.length > 0 && (
-            <View style={styles.breakdownContainer}>
+            <Animated.View entering={FadeInDown.duration(300).springify().damping(12)} style={styles.breakdownContainer}>
               <Typo size={18} fontWeight="600" color={colors.black} style={styles.breakdownTitle}>
                 Category Breakdown
               </Typo>
@@ -187,7 +188,7 @@ const Statistics = () => {
                   </View>
                 )
               })}
-            </View>
+            </Animated.View>
           )}
         </ScrollView>
       </View>
