@@ -44,8 +44,7 @@ const TransactionModal = () => {
 
     const [wallets, setWallets] = useState<{ label: string; value: string }[]>([])
 
-
-    const oldTransaction: {name: string, image: string, id: string} = useLocalSearchParams()
+    const oldTransaction: TransactionType = useLocalSearchParams()
     
     const onDateChange = (event: any, selectedDate: any) => {
         const currentDate = selectedDate || transaction.date
@@ -53,15 +52,19 @@ const TransactionModal = () => {
         setShowDatePicker(Platform.OS === 'ios' ? true : false);
     }
 
-    // useEffect(() => {
-    //     if(oldTransaction?.id){
-    //         setTransaction({
-    //             name: oldTransaction.name,
-    //             image: {uri: oldTransaction.image},
-    //             id: oldTransaction.id
-    //         })
-    //     }
-    // }, [])
+    useEffect(() => {
+        if(oldTransaction?.id){
+            setTransaction({
+                type: oldTransaction?.type,
+                amount: Number(oldTransaction.amount),
+                description: oldTransaction.description || "",
+                date: new Date(oldTransaction.date),
+                category: oldTransaction.category || "",
+                image: oldTransaction.image,
+                walletID: oldTransaction.walletID,
+            })
+        }
+    }, [])
     
     useEffect(() => {
         if(transaction.type === 'income'){
@@ -112,31 +115,54 @@ const TransactionModal = () => {
         }
 
 
+        let finalImageUrl: string | null = null
+
         try {
-            if(oldTransaction?.id){
-                const updated = await updateTransaction(oldTransaction.id, transaction)
-
-                if (updated){
-                    Alert.alert('Success', 'Transaction updated!')
-                    router.back()
-                }
-                else {
-                    Alert.alert('Error', 'Failed to update transaction')
-                }
+            if (image && typeof image !== 'string' && image.uri) {
+            setImageLoading(true)
+            const uploadResult = await uploadFiletoCloudinary(
+                { uri: image.uri },
+                'transactions'
+            )
+            if (!uploadResult.success || !uploadResult.data) {
+                throw new Error(uploadResult.msg || 'Failed to upload image')
             }
-            else {
-                const inserted = await insertTransaction(transaction)
-                if (inserted){
-                    Alert.alert('Success', 'Transaction added!')
-                    router.back()
-                }
-                else {
-                    Alert.alert('Error', txError ?? 'Failed to add transaction')
-                }
+            finalImageUrl = uploadResult.data
+            } else if (typeof image === 'string') {
+                finalImageUrl = image
             }
 
-        } catch(error: any) {
-            Alert.alert('Error', error)
+            const payload: Partial<TransactionType> = {
+                type,
+                amount,
+                date: (date as Date).toISOString(),   // supabase wants ISO strings
+                walletID,
+                image: finalImageUrl,
+                description: description || null,
+                category: type === 'income' ? category || 'salary' : category,
+            }
+
+            let result: any
+
+            if (oldTransaction?.id) {
+                result = await updateTransaction(oldTransaction.id, payload)
+            } else {
+                result = await insertTransaction(payload as TransactionType)
+            }
+
+            if (result) {
+            Alert.alert('Success', oldTransaction?.id ? 'Transaction updated!' : 'Transaction added!')
+            router.back()
+            } else {
+            Alert.alert(
+                'Error',
+                txError || (oldTransaction?.id ? 'Failed to update' : 'Failed to add')
+            )
+            }
+        } catch (err: any) {
+            Alert.alert('Error', err.message || 'Something went wrong')
+        } finally {
+            setImageLoading(false)
         }
     }
 

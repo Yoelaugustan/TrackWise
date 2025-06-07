@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { TransactionItemProps, TransactionListType } from '@/types'
+import { TransactionItemProps, TransactionListType, TransactionType } from '@/types'
 import { colors, radius, spacingY } from '@/constants/theme'
 import { verticalScale } from '@/utils/styling'
 import Typo from './Typo'
@@ -8,6 +8,7 @@ import { FlashList } from "@shopify/flash-list";
 import Loading from './Loading'
 import { expenseCategories, incomeCategories } from '@/constants/data'
 import Animated, { FadeInDown } from 'react-native-reanimated'
+import { router } from 'expo-router'
 
 const TransactionList = ({
     data,
@@ -16,8 +17,22 @@ const TransactionList = ({
     emptyListMessage,
 }: TransactionListType) => {
 
-    const handleClick = () => {
-        
+    const handleClick = (item: TransactionType) => {
+        router.push({
+            pathname: '/(modals)/transactionModal',
+            params: {
+                id: item?.id,
+                type: item?.type,
+                amount: item?.amount?.toString(),
+                category: item?.category,
+                date: item.date?.toString(),
+                description: item?.description,
+                image: item?.image,
+                walletID: item?.walletID,
+                authUID: item?.authUID
+            }
+        })
+
     }
   return (
     <View style={styles.container}>
