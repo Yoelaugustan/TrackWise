@@ -13,6 +13,7 @@ import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
 import { supabase } from '../../lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import { useWalletActions } from '@/hooks/useWalletActions'
 
   const Register = () => {
     const emailRef = useRef('')
@@ -23,6 +24,7 @@ import uuid from 'react-native-uuid';
     const [showPass, setShowPass] = useState(false)
     const [showConfPass, setShowConfPass] = useState(false)
     const router = useRouter()
+    const { insertWallet, error: walletError } = useWalletActions();
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleSubmit = async()=>{
@@ -99,11 +101,24 @@ import uuid from 'react-native-uuid';
 
         await AsyncStorage.setItem('userId', newUserId);
 
-        router.replace('/(tabs)');
+        const newWallet = await insertWallet({ name: 'default', image: null });
+        console.log('insertWallet returned →', newWallet);
+        console.log('walletError →', walletError);
+        if (!newWallet) {
+          console.error('Failed to insert default wallet:', walletError);
+          await supabase
+            .from('authentication').delete().eq('id', newUserId)
+          Alert.alert('Sign Up', `Failed to create default wallet:\n${walletError}`);
+          return;
+        }
+
+        Alert.alert('Sign Up', 'Account created successfully!')
       } catch (error: any) {
         console.error('Register → unexpected error:', error);
         Alert.alert('Sign Up Error', error.message ?? 'Something went wrong.');
+      } finally {
         setIsLoading(false);
+        router.replace('/(tabs)');
       }
     }
   return (
