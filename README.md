@@ -1,5 +1,5 @@
 ## Description
-This Expense Tracker is a React Native mobile app built with Expo. It lets users record and categorize expenses and income, then view month-by-month summaries with interactive pie charts. Authentication and data storage are powered by Supabase (PostgreSQL + Auth + Storage), while file-based routing comes courtesy of Expo Router and charts via react-native-chart-kit.
+This Expense Tracker is a React Native mobile app built with Expo. It lets users record and categorize expenses and income, then view month-by-month summaries with interactive pie charts. Authentication and data storage are powered by Supabase (PostgreSQL + Storage), while file-based routing comes courtesy of Expo Router and charts via react-native-chart-kit.
 
 ## Features
 - Record Transactions: Add expenses or income, assign to custom categories, and specify amounts and dates.
