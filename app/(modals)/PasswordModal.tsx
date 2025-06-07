@@ -5,7 +5,7 @@ import ModalWrapper from '@/components/ModalWrapper'
 import { ScrollView } from 'react-native'
 import Typo from '@/components/Typo'
 import Header from '@/components/Header'
-import Animated, { FadeIn } from 'react-native-reanimated'
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated'
 import { Image } from 'expo-image'
 import { verticalScale } from '@/utils/styling'
 import Input from '@/components/Input'
@@ -72,16 +72,16 @@ const PasswordModal:  React.FC = () => {
 
                 <View style={styles.input}>
                     {variant === 'login' && (
-                        <View style={styles.inputContainer}>
+                        <Animated.View entering={FadeInDown.delay(100).springify().damping(14)} style={styles.inputContainer}>
                             <Typo color={colors.black}>Enter Your Email:</Typo>
                             <Input 
                                 placeholder='Your Email'
                                 onChangeText={(value) => emailRef.current = value}
                                 icon={<Icons.EnvelopeSimple size={verticalScale(26)} color={colors.black} weight='bold'/>}
                             />
-                        </View>
+                        </Animated.View>
                     )}
-                    <View style={styles.inputContainer}>
+                    <Animated.View entering={FadeInDown.delay(200).springify().damping(14)} style={styles.inputContainer}>
                         <Typo color={colors.black}>Enter New Password: </Typo>
                         <Input 
                             placeholder='New Password'
@@ -98,9 +98,9 @@ const PasswordModal:  React.FC = () => {
                                 </TouchableOpacity>
                             }
                         />
-                    </View>
+                    </Animated.View>
 
-                    <View style={styles.inputContainer}>
+                    <Animated.View entering={FadeInDown.delay(300).springify().damping(14)} style={styles.inputContainer}>
                         <Typo color={colors.black}>Confirm New Password:</Typo>
                         <Input 
                             containerStyle={styles.password}
@@ -118,12 +118,15 @@ const PasswordModal:  React.FC = () => {
                                 </TouchableOpacity>
                             }
                         />
-                    </View>
+                    </Animated.View>
                 </View>
 
-                <Button onPress={handleSave}>
-                    <Typo>Save Password</Typo>
-                </Button>
+                <Animated.View entering={FadeInDown.delay(400).springify().damping(14)}>
+                    <Button onPress={handleSave}>
+                        <Typo>Save Password</Typo>
+                    </Button>
+                </Animated.View>
+
             </View>
         </ScrollView>
     </ModalWrapper>

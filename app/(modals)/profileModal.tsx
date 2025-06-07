@@ -17,6 +17,7 @@ import { useUserProfile } from '@/hooks/useUserProfile'
 import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile'
 import { router } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker';
+import Animated, { FadeInDown } from 'react-native-reanimated'
 
 
 const ProfileModal = () => {
@@ -122,23 +123,23 @@ const ProfileModal = () => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.inputContainer}>
+                <Animated.View entering={FadeInDown.delay(100).springify().damping(14)} style={styles.inputContainer}>
                     <Typo color={colors.black}>Name</Typo>
                     <Input 
                         placeholder='Name'
                         value={userData.name}
                         onChangeText={(value) => {setUserData({...userData, name: value})} }
                     />
-                </View>
+                </Animated.View>
 
-                <View style={styles.inputContainer}>
+                <Animated.View entering={FadeInDown.delay(200).springify().damping(14)} style={styles.inputContainer}>
                     <Typo color={colors.black}>Email</Typo>
                     <Input 
                         placeholder='Email'
                         value={userData.email}
                         onChangeText={(value) => {setUserData({...userData, email: value})} }
                     />
-                </View>
+                </Animated.View>
             </ScrollView>
         </View>
 

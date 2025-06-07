@@ -60,7 +60,7 @@ const TransactionList = ({
         <View style={styles.container}>
             {title && <Typo size={20} fontWeight="500" style={{marginBottom: spacingY._10}}>{title}</Typo>}
 
-            {sections.map(section => {
+            {sections.map((section, sIndex) => {
                 // calculate daily totals
                 const totalIncome = section.data
                     .filter(tx => tx.type === 'income')
@@ -70,7 +70,7 @@ const TransactionList = ({
                     .reduce((sum, tx) => sum + Number(tx.amount), 0)
 
                 return (
-                    <View key={section.title} style={styles.sectionBox}>
+                    <Animated.View entering={FadeInDown.delay(sIndex * 70).springify().damping(14)} key={section.title} style={styles.sectionBox}>
                         {/* Date header */}
                         <View style={styles.sectionTitle}>
                             <Typo size={12} fontWeight="500">
@@ -103,7 +103,7 @@ const TransactionList = ({
                                 )}
                             </React.Fragment>
                         ))}
-                    </View>
+                    </Animated.View>
                 )
             })}
         </View>
@@ -134,7 +134,7 @@ const TransactionItem = ({
     const hasDescription = Boolean(item.description && item.description.trim())
 
     return (
-        <Animated.View entering={FadeInDown.delay(index * 70).springify().damping(14)} style={{ padding: 4, flex: 1 }}>
+        <View style={{ padding: 4, flex: 1 }}>
             <TouchableOpacity style={styles.row} onPress={()=>handleClick(item)}>
                 <View style={[styles.icon, { backgroundColor: catDef.bgColor }]}>
                     {IconComponent && (
@@ -174,7 +174,7 @@ const TransactionItem = ({
                     </Typo>
                 </View>
             </TouchableOpacity>
-        </Animated.View>
+        </View>
     )
 }
 
