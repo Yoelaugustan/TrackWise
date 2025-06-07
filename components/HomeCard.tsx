@@ -35,18 +35,17 @@ const HomeCard = ({ children, monthlyTransactions }: HomeCardProps) => {
         resizeMode='stretch'
     >
         <View style={styles.container}>
-            <View>
-                {/* Month Navigator */}
-                <View style={styles.monthNavigator}>
-                    {children}
-                </View>
 
-                {/* Net for this month */}
-                    <View style={styles.totalBalanceRow}>
-                        <Typo color={colors.black} size={25} fontWeight="bold">
-                            Rp. {net.toLocaleString('id-ID')}
-                        </Typo>
-                    </View>
+            {/* Month Navigator */}
+            <View style={styles.monthNavigator}>
+                {children}
+            </View>
+
+            {/* Net for this month */}
+            <View style={styles.totalBalanceRow}>
+                <Typo color={colors.black} size={25} fontWeight="bold">
+                    Rp. {net.toLocaleString('id-ID')}
+                </Typo>
             </View>
 
             {/* Expense and Income */}
@@ -117,7 +116,6 @@ const styles = StyleSheet.create({
     totalBalanceRow: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: verticalScale(7)
     },
     stats: {
         flexDirection: 'row',
