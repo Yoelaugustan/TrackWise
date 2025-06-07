@@ -8,7 +8,7 @@ This Expense Tracker is a React Native mobile app built with Expo. It lets users
 
 - Category Management: Predefined expense/income categories with icons and colors; fallback “Others” for uncategorized items.
 
-- Cloud Storage: Upload profile images to Cloudinary (or Supabase Storage).
+- Cloud Storage: Upload profile images to Cloudinary
 
 ## Usage
 - Run on device/simulator:
