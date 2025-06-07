@@ -60,7 +60,6 @@ const Profile = () => {
           color={colors.white} 
         />
       ),
-      // routeName: '/(modals)/profileModal',
       bgColor: colors.black,
     },
     {
@@ -71,7 +70,6 @@ const Profile = () => {
           color={colors.white} 
         />
       ),
-      // routeName: '/(modals)/profileModal',
       bgColor: colors.black,
     },
   ]

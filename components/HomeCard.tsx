@@ -5,35 +5,27 @@ import { scale, verticalScale } from '@/utils/styling'
 import { colors, spacingY } from '@/constants/theme'
 import { ImageBackground } from 'expo-image'
 import * as Icons from 'phosphor-react-native'
-import { WalletType } from '@/types'
+import { HomeCardProps, WalletType } from '@/types'
 import { useFocusEffect } from 'expo-router'
 import { useWalletActions } from '@/hooks/useWalletActions'
+import { TransactionType } from '@/types'
 
-const HomeCard = () => {
+const HomeCard = ({ children, monthlyTransactions }: HomeCardProps) => {
 
-    const [wallets, setWallets] = useState<WalletType[]>([])
-    const { selectWallet, updateWallet, deleteWallet, loading: walletLoading, error: walletError } = useWalletActions()
-
-    const fetchWallets = useCallback(async () => {
-        const data = await selectWallet()
-        if (data) setWallets(data)
-    }, [selectWallet])
-        
-    useFocusEffect(
-        useCallback(() => {
-            fetchWallets()
-        }, [fetchWallets])
+    const monthlyTotals = monthlyTransactions.reduce(
+        (acc, tx) => {
+            if (tx.type === 'income') {
+                acc.income += Number(tx.amount)
+            } 
+            else {
+                acc.expense += Number(tx.amount)
+            }
+            return acc;
+        },
+        { income: 0, expense: 0 }
     )
 
-    const getTotals = () => {
-        return wallets.reduce((total: any, item: WalletType) => {
-            total.balance = total.balance + Number(item.amount)
-            total.income = total.income + Number(item.totalIncome)
-            total.expense = total.expense + Number(item.totalExpense)
-
-            return total
-        }, {balance: 0, income: 0, expense: 0})
-    }
+    const net = monthlyTotals.income - monthlyTotals.expense
 
 
   return (
@@ -44,60 +36,57 @@ const HomeCard = () => {
     >
         <View style={styles.container}>
             <View>
-                {/* Total Balance */}
-                <View style={styles.totalBalanceRow}>
-                    <Typo color={colors.neutral800} size={15} fontWeight={'500'}>Total Balance</Typo>
-                
-                    <Icons.DotsThreeOutline 
-                    size={verticalScale(20)}
-                    color={colors.black}
-                    weight="fill"
-                    />
+                {/* Month Navigator */}
+                <View style={styles.monthNavigator}>
+                    {children}
                 </View>
-                
-                <Typo color={colors.black} size={25} fontWeight={'bold'}>
-                    Rp. {walletLoading ? '----' : getTotals()?.balance?.toLocaleString('id-ID')}
-                </Typo>
+
+                {/* Net for this month */}
+                    <View style={styles.totalBalanceRow}>
+                        <Typo color={colors.black} size={25} fontWeight="bold">
+                            Rp. {net.toLocaleString('id-ID')}
+                        </Typo>
+                    </View>
             </View>
 
             {/* Expense and Income */}
             <View style={styles.stats}>
                 {/* Income */}
-                <View style={{ gap: verticalScale(4)}}>
+                <View style={{ gap: verticalScale(2)}}>
                     <View style={styles.incomeExpense}>
                         <View style={styles.statsIcon}>
                             <Icons.ArrowUp 
-                                size={verticalScale(15)}
+                                size={verticalScale(12)}
                                 color={colors.green}
                                 weight='bold'
                             />
                         </View>
-                        <Typo size={15} color={colors.neutral700} fontWeight={'500'}>Income</Typo>
+                        <Typo size={14} color={colors.neutral700} fontWeight={'500'}>Income</Typo>
                     </View>
 
                     <View style={{ alignSelf: 'center' }}>
-                        <Typo size={16} color={colors.green} fontWeight={'600'}>
-                            Rp. {walletLoading ? '----' : getTotals()?.income?.toLocaleString('id-ID')}
+                        <Typo size={15} color={colors.green} fontWeight={'600'}>
+                            Rp. {monthlyTotals.income.toLocaleString('id-ID')}
                         </Typo>
                     </View>
                 </View>
 
                 {/* Expense */}
-                <View style={{ gap: verticalScale(4)}}>
+                <View style={{ gap: verticalScale(2)}}>
                     <View style={styles.incomeExpense}>
                         <View style={styles.statsIcon}>
                             <Icons.ArrowDown 
-                                size={verticalScale(15)}
+                                size={verticalScale(12)}
                                 color={colors.rose}
                                 weight='bold'
                             />
                         </View>
-                        <Typo size={15} color={colors.neutral700} fontWeight={'500'}>Expense</Typo>
+                        <Typo size={14} color={colors.neutral700} fontWeight={'500'}>Expense</Typo>
                     </View>
 
                     <View style={{ alignSelf: 'center' }}>
-                        <Typo size={16} color={colors.rose} fontWeight={'600'}>
-                            Rp. {walletLoading ? '----' : getTotals()?.expense?.toLocaleString('id-ID')}
+                        <Typo size={15} color={colors.rose} fontWeight={'600'}>
+                            Rp. {monthlyTotals.expense.toLocaleString('id-ID')}
                         </Typo>
                     </View>
                 </View>
@@ -122,11 +111,13 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: 'space-between',
     },
+    monthNavigator: {
+        paddingVertical: 0,
+    },
     totalBalanceRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: spacingY._5
+        marginTop: verticalScale(7)
     },
     stats: {
         flexDirection: 'row',
