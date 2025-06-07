@@ -67,13 +67,15 @@ const TransactionModal = () => {
     }, [])
     
     useEffect(() => {
-        if(transaction.type === 'income'){
-            setTransaction((prev) => ({ ...prev, category: 'salary' }))
+        if(!oldTransaction?.id){
+            if(transaction.type === 'income'){
+                setTransaction((prev) => ({ ...prev, category: 'salary' }))
+            }
+            else{
+                setTransaction((prev) => ({ ...prev, category: 'food' }))
+            }
         }
-        else {
-            setTransaction((prev) => ({...prev, category: ''}))
-        }
-    }, [transaction.type])
+    }, [transaction.type, oldTransaction?.id])
 
     const {
         selectTransaction,
