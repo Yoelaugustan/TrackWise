@@ -97,15 +97,15 @@ export const expenseCategories: ExpenseCategoriesType = {
 }
 
 export const incomeCategories: IncomeCategoriesType = {
-    income: {
+    salary: {
         label: "Salary",
-        value: "Salary",
+        value: "salary",
         icon: Icons.Briefcase,
         bgColor: "#0EA5E9"
     },
     bonus: {
         label: "Bonus",
-        value: "Bonus",
+        value: "bonus",
         icon: Icons.TipJar,
         bgColor: "#EAB308"
     },

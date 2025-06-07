@@ -1,12 +1,41 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import Typo from './Typo'
 import { scale, verticalScale } from '@/utils/styling'
 import { colors, spacingY } from '@/constants/theme'
 import { ImageBackground } from 'expo-image'
 import * as Icons from 'phosphor-react-native'
+import { WalletType } from '@/types'
+import { useFocusEffect } from 'expo-router'
+import { useWalletActions } from '@/hooks/useWalletActions'
 
 const HomeCard = () => {
+
+    const [wallets, setWallets] = useState<WalletType[]>([])
+    const { selectWallet, updateWallet, deleteWallet, loading: walletLoading, error: walletError } = useWalletActions()
+
+    const fetchWallets = useCallback(async () => {
+        const data = await selectWallet()
+        if (data) setWallets(data)
+    }, [selectWallet])
+        
+    useFocusEffect(
+        useCallback(() => {
+            fetchWallets()
+        }, [fetchWallets])
+    )
+
+    const getTotals = () => {
+        return wallets.reduce((total: any, item: WalletType) => {
+            total.balance = total.balance + Number(item.amount)
+            total.income = total.income + Number(item.totalIncome)
+            total.expense = total.expense + Number(item.totalExpense)
+
+            return total
+        }, {balance: 0, income: 0, expense: 0})
+    }
+
+
   return (
     <ImageBackground 
         source={require("@/assets/images/card.png")} 
@@ -27,7 +56,7 @@ const HomeCard = () => {
                 </View>
                 
                 <Typo color={colors.black} size={25} fontWeight={'bold'}>
-                    Rp. 100.000.000
+                    Rp. {walletLoading ? '----' : getTotals()?.balance?.toLocaleString('id-ID')}
                 </Typo>
             </View>
 
@@ -48,7 +77,7 @@ const HomeCard = () => {
 
                     <View style={{ alignSelf: 'center' }}>
                         <Typo size={16} color={colors.green} fontWeight={'600'}>
-                            Rp. 1.000.000
+                            Rp. {walletLoading ? '----' : getTotals()?.income?.toLocaleString('id-ID')}
                         </Typo>
                     </View>
                 </View>
@@ -68,7 +97,7 @@ const HomeCard = () => {
 
                     <View style={{ alignSelf: 'center' }}>
                         <Typo size={16} color={colors.rose} fontWeight={'600'}>
-                            Rp. 1.000.000
+                            Rp. {walletLoading ? '----' : getTotals()?.expense?.toLocaleString('id-ID')}
                         </Typo>
                     </View>
                 </View>

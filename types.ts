@@ -39,7 +39,7 @@ export type TypoProps = {
     color?: string;
     fontWeight?: TextStyle["fontWeight"];
     children: any | null;
-    style?: TextStyle;
+    style?: StyleProp<TextStyle>;
     textProps?: TextProps;
 }
 
@@ -80,8 +80,8 @@ export type TransactionType = {
     date: Date | string;
     description?: string;
     image?: any;
-    uid?: string;
-    walletId: string;
+    authUID?: string;
+    walletID: string;
 }
 
 export type CategoryType = {
@@ -103,7 +103,6 @@ export type TransactionListType = {
     data: TransactionType[];
     title?: string;
     loading?: boolean;
-    emptyListMessage?: string;
 }
 
 export type TransactionItemProps = {
@@ -159,7 +158,7 @@ export type WalletType = {
     name: string;
     amount?: number;
     totalIncome?: number;
-    totalExpenses?: number;
+    totalExpense?: number;
     image: any;
     uid?: string;
     created?: Date;
@@ -206,4 +205,9 @@ export interface CategoryPickerProps {
     selectedCategory: string | null
     onSelectCategory: (value: string) => void
     containerStyle?: StyleProp<ViewStyle>
+}
+
+export type DailyTransactionListProps = {
+    transactions?: TransactionType[]
+    loading?: boolean
 }

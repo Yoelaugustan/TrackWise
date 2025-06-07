@@ -41,9 +41,10 @@ export function useTransactionActions() {
         const uid = await AsyncStorage.getItem('userId')
         if (!uid) throw new Error('User not logged in')
 
+        console.log(transactionInfo)
         const payload = {
-            ...transactionInfo,
-            authUID: uid,
+          ...transactionInfo,
+          authUID: uid,
         };
 
         const { data, error: insertError } = await supabase
