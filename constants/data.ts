@@ -43,7 +43,7 @@ export const expenseCategories: ExpenseCategoriesType = {
     subscription: {
         label: "Subscription",
         value: "subscription",
-        icon: Icons.CurrencyBtc,
+        icon: Icons.SpotifyLogo,
         bgColor: '#22C55E'
     },
     food: {
@@ -67,7 +67,7 @@ export const expenseCategories: ExpenseCategoriesType = {
     investments: {
         label: "Investments",
         value: "investments",
-        icon: Icons.Bank,
+        icon: Icons.CurrencyBtc,
         bgColor: '#EFBF04'
     },
     saving: {
