@@ -12,21 +12,42 @@ import * as Icons from 'phosphor-react-native'
 import HomeCard from '@/components/HomeCard'
 import TransactionList from '@/components/TransactionList'
 import { useTransactionActions } from '@/hooks/useTransactionActions'
+import MonthNavigator from '@/components/MonthNavigator'
 
 const Home = () => {
   const { profile, loading, error } = useUserProfile()
   const [transactions, setTransactions] = useState<any[]>([])
   const { selectTransaction, loading: transactionLoading, error: transactionError } = useTransactionActions()
+  const [allTx, setAllTx] = useState<any[]>([])
+  const [currentDate, setCurrentDate] = useState(new Date())
 
   useFocusEffect(
     useCallback(() => {
-      const load = async () => {
+      (async () => {
         const data = await selectTransaction()
-        if (data) setTransactions(data)
-      }
-      load()
+        if (data) setAllTx(data)
+      })()
     }, [selectTransaction])
   )
+
+  const filtered = allTx.filter(tx => {
+    const d = new Date(tx.date)
+    return (
+      d.getFullYear() === currentDate.getFullYear() &&
+      d.getMonth() === currentDate.getMonth()
+    )
+  })
+
+  const prevMonth = () => {
+    const m = new Date(currentDate)
+    m.setMonth(m.getMonth() - 1)
+    setCurrentDate(m)
+  }
+  const nextMonth = () => {
+    const m = new Date(currentDate)
+    m.setMonth(m.getMonth() + 1)
+    setCurrentDate(m)
+  }
 
   return (
     <ScreenWrapper>
@@ -44,14 +65,18 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
         >
           {/* Cards */}
-          <View>
-            <HomeCard />
-          </View>
+          <HomeCard monthlyTransactions={filtered}>
+            <MonthNavigator
+              date={currentDate}
+              onPrev={prevMonth}
+              onNext={nextMonth}
+            />
+          </HomeCard>
 
           <TransactionList 
-            data={transactions} 
+            data={filtered} 
             loading={transactionLoading} 
-            title='Recent Transactions'
+            title='Transactions this month'
           />
         </ScrollView>
 

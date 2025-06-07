@@ -211,3 +211,14 @@ export type DailyTransactionListProps = {
     transactions?: TransactionType[]
     loading?: boolean
 }
+
+export interface MonthNavigatorProps {
+    date: Date
+    onPrev: () => void
+    onNext: () => void
+}
+
+export interface HomeCardProps {
+    children?: React.ReactNode
+    monthlyTransactions: TransactionType[]
+}
