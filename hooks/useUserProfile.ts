@@ -1,7 +1,6 @@
-// src/hooks/useUserProfile.ts
 import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { supabase } from '../lib/supabase' // adjust the import path to where your supabase client lives
+import { supabase } from '../lib/supabase'
 import { UserProfile, UseUserProfileResult } from '@/types'
 
 export function useUserProfile(): UseUserProfileResult {
@@ -13,7 +12,6 @@ export function useUserProfile(): UseUserProfileResult {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  // 1) Wrap the entire fetch logic in useCallback so we can call it on demand:
   const fetchProfile = useCallback(async () => {
     try {
       setLoading(true)
@@ -24,7 +22,6 @@ export function useUserProfile(): UseUserProfileResult {
         throw new Error('No userId found in storage (user not logged in)')
       }
 
-      // Fetch email from "authentication"
       const {
         data: authRow,
         error: authError,
@@ -37,7 +34,6 @@ export function useUserProfile(): UseUserProfileResult {
       if (authError) throw authError
       if (!authRow) throw new Error('No matching authentication record found')
 
-      // Fetch username & image from "profiles"
       const {
         data: profileRow,
         error: profileError,
@@ -49,7 +45,6 @@ export function useUserProfile(): UseUserProfileResult {
 
       if (profileError) throw profileError
 
-      // Update state (even if profileRow is null, handle gracefully)
       setProfile({
         email:    authRow.email,
         username: profileRow?.username ?? null,
@@ -64,7 +59,6 @@ export function useUserProfile(): UseUserProfileResult {
     }
   }, [])
 
-  // 2) Call fetchProfile once on mount
   useEffect(() => {
     fetchProfile()
   }, [fetchProfile])

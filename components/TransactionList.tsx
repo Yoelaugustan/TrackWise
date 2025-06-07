@@ -61,7 +61,6 @@ const TransactionList = ({
             {title && <Typo size={20} fontWeight="500" style={{marginBottom: spacingY._10}}>{title}</Typo>}
 
             {sections.map((section, sIndex) => {
-                // calculate daily totals
                 const totalIncome = section.data
                     .filter(tx => tx.type === 'income')
                     .reduce((sum, tx) => sum + Number(tx.amount), 0)

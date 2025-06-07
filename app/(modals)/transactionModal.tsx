@@ -137,7 +137,7 @@ const TransactionModal = () => {
             const payload: Partial<TransactionType> = {
                 type,
                 amount,
-                date: (date as Date).toISOString(),   // supabase wants ISO strings
+                date: (date as Date).toISOString(),
                 walletID,
                 image: finalImageUrl,
                 description: description || null,

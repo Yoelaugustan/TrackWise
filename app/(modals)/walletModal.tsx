@@ -52,7 +52,6 @@ const WalletModal = () => {
         
         let finalImageUrl = typeof image === 'string' ? image : image.uri;
 
-        // Update wallet
         if (oldWallet?.id) {
             const isImageChanged = image && image.uri && image.uri !== oldWallet.image;
 
@@ -77,7 +76,6 @@ const WalletModal = () => {
             return;
         }
         
-        // New Wallet
         setImageLoading(true)
         const uploadResult = await uploadFiletoCloudinary(
             { uri: image.uri }, 

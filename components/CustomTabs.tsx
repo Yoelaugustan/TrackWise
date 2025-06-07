@@ -74,7 +74,6 @@ export default function CustomTabs({ state, descriptors, navigation }: BottomTab
 
         return (
           <TouchableOpacity
-            // href={buildHref(route.name, route.params)}
             key={route.key}
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}

@@ -56,7 +56,6 @@ export function useUpdateUserProfile(): UseUpdateUserProfileResult {
           updates.username = updatedUsername.trim()
         }
         if (updatedImageUrl) {
-          // If it's an object with a "uri" field
           const imageUri =
             typeof updatedImageUrl === 'object' && 'uri' in updatedImageUrl
               ? (updatedImageUrl as { uri: string }).uri
@@ -91,7 +90,6 @@ export function useUpdateUserProfile(): UseUpdateUserProfileResult {
         console.log('Error details:', err)
         console.log('Error message:', err.message || err)
         
-        // More specific error messages
         let errorMessage = 'An unexpected error occurred'
         
         if (err.message?.includes('Email')) {
