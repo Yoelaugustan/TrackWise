@@ -29,4 +29,4 @@ Before installing locally, you can preview the latest published update in Expo G
   ![Preview QR](./assets/images/Expo_QR.png)
 
 - **Or open this link in Expo Go:**  
-  https://expo.dev/preview/update?message=Setting%20Up%20Deployment&updateRuntimeVersion=1.0.0&createdAt=2025-06-07T18%3A00%3A36.425Z&slug=exp&projectId=061d64c8-3c74-453d-a71b-edb77bb0785f&group=241c6761-8827-4130-ae16-1368285a891a
+  https://expo.dev/preview/update?message=Fix%20Route%20Error&updateRuntimeVersion=1.0.0&createdAt=2025-06-08T08%3A12%3A28.545Z&slug=exp&projectId=061d64c8-3c74-453d-a71b-edb77bb0785f&group=3a6d4d8b-6381-4023-98d9-46ca28b6b4e1
