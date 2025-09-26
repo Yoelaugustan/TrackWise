@@ -3,12 +3,13 @@ This Expense Tracker is a React Native mobile app built with Expo. It lets users
 
 ## Features
 - Record Transactions: Add expenses or income, assign to custom categories, and specify amounts and dates.
-
+![Record Transaction](assets/images/expense.jpg)
+![Add Transaction](assets/images/add_expense_2.jpg)
 - Monthly Statistics: View a pie chart breakdown of spending or earnings by category 
-
+![Statistics](assets/images/charts.jpg)
 - Category Management: Predefined expense/income categories with icons and colors; fallback “Others” for uncategorized items.
-
-- Cloud Storage: Upload profile images to Cloudinary
+![Expense Category](assets/images/add_expense_1.jpg)
+![Income Category](assets/images/add_income.jpg)
 
 ## Usage
 - Run on device/simulator:
