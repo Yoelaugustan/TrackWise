@@ -22,7 +22,7 @@ This Expense Tracker is a React Native mobile app built with Expo. It lets users
   - Profile: update avatar and settings.
 
 ## Preview in Expo Go
-
+!! Database Server Currently Offline
 Before installing locally, you can preview the latest published update in Expo Go:
 
 - **Scan QR Code:**  
